@@ -24,7 +24,9 @@ h1,h2,h3,.nav,.meta,.tag{font-family:"Archivo",system-ui,sans-serif}
 .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;padding:64px 0 56px}
 .hero h1{font-size:clamp(2.6rem,6vw,4.4rem);line-height:.98;margin:0 0 20px;font-weight:800;
   font-stretch:112%;letter-spacing:-.02em}
-.hero p.lede{font-size:1.2rem;max-width:34ch;margin:0 0 22px}
+.hero p.lede{font-size:1.25rem;max-width:36ch;margin:0 0 16px;line-height:1.5}
+.hero p.about{max-width:46ch;margin:0 0 12px;color:var(--ink)}
+.hero .links{margin-top:20px}
 .hero .who{display:flex;gap:16px;align-items:center;margin-top:28px}
 .hero .who img{width:76px;height:76px;border-radius:50%;object-fit:cover;border:2px solid var(--panel);box-shadow:0 0 0 1px var(--rule)}
 .hero .who p{margin:0;font-size:.95rem;color:var(--steel);line-height:1.45}
@@ -37,13 +39,17 @@ figure.orbit figcaption{font-size:.85rem;color:var(--steel);margin-top:8px;max-w
 .axis{stroke:var(--steel);stroke-width:1}
 .axlab{font:500 11px "Archivo",sans-serif;fill:var(--steel)}
 .safe{fill:none;stroke:var(--brass);stroke-width:1.6;stroke-dasharray:5 5}
-.traj{fill:none;stroke:var(--ink);stroke-width:1.6;stroke-dasharray:600;stroke-dashoffset:600;animation:draw 2.2s ease-out .2s forwards}
-.cov{fill:rgba(156,111,34,.12);stroke:var(--brass);stroke-width:1;opacity:0;animation:pop .5s ease-out forwards;animation-delay:calc(.35s + var(--i)*.38s)}
+.traj{fill:none;stroke:var(--ink);stroke-width:2;stroke-dasharray:1;stroke-dashoffset:1;animation:draw 2.4s ease-out .2s forwards}
+.mc{fill:none;stroke:var(--steel);stroke-width:.6;opacity:0;animation:mcin 1.2s ease-out 1.6s forwards}
+.koz{fill:none;stroke:#A23B2A;stroke-width:1;stroke-dasharray:3 3}
+.tick{font:400 10px "Archivo",sans-serif;fill:var(--steel)}
+@keyframes mcin{to{opacity:.35}}
+.cov{fill:rgba(156,111,34,.16);stroke:var(--brass);stroke-width:1.1;opacity:0;animation:pop .5s ease-out forwards;animation-delay:calc(.3s + var(--i)*.32s)}
 .mean{fill:var(--ink);opacity:0;animation:pop .3s ease-out forwards;animation-delay:calc(.35s + var(--i)*.38s)}
 .chief{fill:var(--ink)}
 @keyframes draw{to{stroke-dashoffset:0}}
 @keyframes pop{to{opacity:1}}
-@media (prefers-reduced-motion:reduce){.traj{animation:none;stroke-dashoffset:0}.cov,.mean{animation:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.traj{animation:none;stroke-dashoffset:0}.cov,.mean{animation:none;opacity:1}.mc{animation:none;opacity:.35}}
 
 /* sections */
 section{padding:56px 0;border-top:1px solid var(--rule)}
