@@ -181,23 +181,25 @@
 
       <article class="xp">
         <h3>PD and PID control of a motor-angle loop</h3>
-        <p class="meta">Princeton University online research program, Prof. Michael Littman · team of four · February to March 2025</p>
+        <p class="meta">Princeton University online research program, Prof. Michael Littman · February to March 2025</p>
         <div class="xp-grid even">
           <div>
-            <p>Our team tuned PD and PID controllers that hold a DC motor at a commanded angle, with the plant modeled as <i>G</i>(<i>s</i>) = 3 / (0.1<i>s</i>² + <i>s</i>). We checked every design three ways: op-amp circuits in Falstad, breadboard circuits in Tinkercad, and transfer-function analysis in Octave.</p>
+            <p>In a four-person project on tuning the loop that holds a DC motor at a commanded angle, <i>G</i>(<i>s</i>) = 3 / (0.1<i>s</i>² + <i>s</i>), I was responsible for the theory and the transfer-function analysis.</p>
+            <h4 class="kicker">What we found</h4>
             <ul class="plain">
-              <li>Retuning the PD controller from <i>K</i><sub>p</sub> = 7, <i>K</i><sub>d</sub> = 0.063 to <i>K</i><sub>p</sub> = 38, <i>K</i><sub>d</sub> = 2.28 gave a faster rise, less overshoot and a shorter settling time.</li>
-              <li>A PID controller with <i>K</i><sub>p</sub> = 30, <i>K</i><sub>d</sub> = 2.2, <i>K</i><sub>i</sub> = 4 kept that speed and added integral action against steady-state error.</li>
+              <li>Retuning the PD gains from <i>K</i><sub>p</sub> = 7, <i>K</i><sub>d</sub> = 0.063 to <i>K</i><sub>p</sub> = 38, <i>K</i><sub>d</sub> = 2.28 gave a faster rise, less overshoot and a shorter settling time, confirmed in Octave, Falstad and Tinkercad.</li>
+              <li>Pole–zero maps showed that raising <i>K</i><sub>p</sub> and <i>K</i><sub>d</sub> moves the closed-loop poles to the left, toward a faster and better-damped response.</li>
+              <li>Bode plots showed that the small integral gain (<i>K</i><sub>i</sub> = 4) acts mainly at low frequency, so the PID design kept the speed of the tuned PD design.</li>
             </ul>
             <div class="mine">
-              <h3>My part</h3>
-              <p>The literature review on what each gain does, and the Octave analysis: step responses, pole–zero maps and Bode plots. They showed that raising <i>K</i><sub>p</sub> and <i>K</i><sub>d</sub> moves the closed-loop poles to the left, and that the small <i>K</i><sub>i</sub> acts mainly at low frequency. I also wrote the discussion and conclusion.</p>
+              <h3>My role</h3>
+              <p>The literature review on what each gain does; the Octave analysis of every design (step responses, pole–zero maps and Bode plots); and the discussion and conclusion. My teammates built the Falstad and Tinkercad circuit simulations.</p>
             </div>
-            <p class="doc-link"><a class="btn" href="assets/docs/PID-control-workshop-presentation.pdf" target="_blank" rel="noopener">View the final presentation (PDF, 29 slides)</a></p>
-            <p class="chips"><span>PD / PID control</span><span>Op-amp circuits</span><span>Octave</span><span>Falstad</span><span>Tinkercad</span><span>Pole–zero and Bode analysis</span></p>
+            <p class="doc-link"><a class="btn" href="assets/docs/PID-control-workshop-presentation.pdf" target="_blank" rel="noopener">Team presentation (PDF)</a></p>
+            <p class="chips"><span>PD / PID control</span><span>Pole–zero analysis</span><span>Bode plots</span><span>Octave</span><span>Op-amp circuits</span></p>
           </div>
           <div class="pid" id="pid">
-            <p class="pid-title">Try our gains</p>
+            <p class="pid-title">Try the gains</p>
             <div class="pid-controls">
               <div class="presets" role="group" aria-label="Controller preset">
                 <button type="button" data-preset="init">Initial PD</button>
@@ -214,17 +216,12 @@
             <p class="meta small">Step response of the closed loop <i>C</i>(<i>s</i>)<i>G</i>(<i>s</i>)/(1 + <i>C</i>(<i>s</i>)<i>G</i>(<i>s</i>)) with <i>C</i>(<i>s</i>) = <i>K</i><sub>p</sub> + <i>K</i><sub>i</sub>/<i>s</i> + <i>K</i><sub>d</sub><i>s</i>, computed in your browser from our plant model. Presets are the gains in our presentation.</p>
           </div>
         </div>
-        <div class="figs three">
-          <figure><button class="zoom" data-group="pid"><img src="assets/pid/slide-8.jpg" alt="Falstad op-amp PID circuit with Kp = 30, Kd = 2.2, Ki = 4"></button><figcaption>Op-amp PID circuit in Falstad (<i>K</i><sub>p</sub> = 30, <i>K</i><sub>d</sub> = 2.2, <i>K</i><sub>i</sub> = 4).</figcaption></figure>
-          <figure><button class="zoom" data-group="pid"><img src="assets/pid/slide-17.jpg" alt="Tinkercad breadboard simulation of the PD controller with oscilloscopes"></button><figcaption>The tuned PD controller (<i>K</i><sub>p</sub> = 38, <i>K</i><sub>d</sub> = 2.28) rebuilt on breadboards in Tinkercad.</figcaption></figure>
-          <figure><button class="zoom" data-group="pid"><img src="assets/pid/slide-11.jpg" alt="Three pole-zero maps of the PD closed loop"></button><figcaption>My Octave pole–zero maps: larger <i>K</i><sub>p</sub> and <i>K</i><sub>d</sub> push the poles left.</figcaption></figure>
-        </div>
       </article>
 
       <article class="xp">
         <h3>CNC machine design support</h3>
         <p class="meta">Engineering intern, Aplos CNC Machine Co., Ltd., Shanghai, summers 2025 and 2026</p>
-        <p>Applied direct-drive technology in CNC machines and assisted engineers with product testing and data analysis.<span class="cad-ref"> My SolidWorks work from this internship is in <a href="#cad">CAD &amp; Design</a>.</span></p>
+        <p>Applied direct-drive technology in CNC machines and assisted engineers with product testing and data analysis.</p>
       </article>
 
     </div>
@@ -235,9 +232,13 @@
   <div class="head">
     <h2>CAD &amp; Design</h2>
     <div class="body wide">
-      <p class="narrow intro">SolidWorks models, assemblies, motion studies and drawings from my courses, team projects and internships. Select a project to see all of its images and video.</p>
-      <div class="filters" id="cad-filters" role="group" aria-label="Filter projects by category"></div>
-      <div class="cad-grid" id="cad-grid"></div>
+      <p class="narrow intro">SolidWorks models and mechanism designs from my courses and team projects. Use the arrows or swipe to move between projects.</p>
+      <div class="slider" id="cad-slider" aria-roledescription="carousel" aria-label="CAD projects">
+        <button class="sl-btn prev" type="button" aria-label="Previous project">‹</button>
+        <div class="sl-track" id="cad-track"></div>
+        <button class="sl-btn next" type="button" aria-label="Next project">›</button>
+      </div>
+      <div class="sl-dots" id="cad-dots" role="group" aria-label="Choose a project"></div>
     </div>
   </div>
 </section>
@@ -332,44 +333,47 @@ function hideIfMissing(img, box) { img.addEventListener('error', function () { b
 function ytId(u) { var m = String(u).match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/); return m ? m[1] : null; }
 
 (function cad() {
-  var grid = document.getElementById('cad-grid'), bar = document.getElementById('cad-filters');
-  if (!grid) return;
-  var cats = SITE.cadCategories || [], projects = SITE.cadProjects || [];
-  var current = 'all';
-  function catName(id) { for (var i = 0; i < cats.length; i++) if (cats[i].id === id) return cats[i].name; return id; }
-  function render() {
-    grid.innerHTML = '';
-    projects.filter(function (p) { return current === 'all' || p.category === current; }).forEach(function (p) {
-      var card = el('article', 'cad-card');
-      var media = (p.images || []).map(function (src, i) { return { type: 'img', src: src, cap: (p.captions || [])[i] || p.title }; });
-      if (p.video) media.unshift({ type: ytId(p.video) ? 'yt' : 'video', src: p.video, cap: p.title + ' (video)' });
-      var cover = el('button', 'cad-cover'); cover.type = 'button'; cover.setAttribute('aria-label', 'Open ' + p.title);
-      if (p.images && p.images.length) {
-        var img = el('img'); img.src = p.images[0]; img.alt = p.title;
-        img.addEventListener('error', function () { img.remove(); cover.classList.add('empty'); var c = cover.querySelector('.count'); if (c) c.remove(); });
-        cover.appendChild(img);
-      } else cover.classList.add('empty');
-      if (p.video) cover.appendChild(el('span', 'badge', '▶ video'));
-      if (media.length > 1) cover.appendChild(el('span', 'count', media.length + ' items'));
-      cover.addEventListener('click', function () { if (media.length) openLB(media, 0); });
-      card.appendChild(cover);
-      card.appendChild(el('p', 'cad-cat', esc(catName(p.category))));
-      card.appendChild(el('h3', null, esc(p.title)));
-      card.appendChild(el('p', 'meta', esc([p.role, p.context, p.date].filter(Boolean).join(' · '))));
-      if (p.summary) card.appendChild(el('p', null, esc(p.summary)));
-      if (p.link) { var lp = el('p', 'cad-link'); var la = el('a', null, esc(p.linkText || 'Open link')); la.href = p.link; la.target = '_blank'; la.rel = 'noopener'; lp.appendChild(la); card.appendChild(lp); }
-      if (p.tools && p.tools.length) card.appendChild(el('p', 'chips', p.tools.map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('')));
-      grid.appendChild(card);
-    });
-  }
-  var used = {}; projects.forEach(function (p) { used[p.category] = true; });
-  var all = [{ id: 'all', name: 'All' }].concat(cats.filter(function (c) { return used[c.id]; }));
-  all.forEach(function (c) {
-    var b = el('button', c.id === 'all' ? 'on' : '', esc(c.name)); b.type = 'button';
-    b.addEventListener('click', function () { current = c.id; bar.querySelectorAll('button').forEach(function (x) { x.classList.toggle('on', x === b); }); render(); });
-    bar.appendChild(b);
+  var track = document.getElementById('cad-track'), dots = document.getElementById('cad-dots');
+  if (!track) return;
+  var projects = SITE.cadProjects || [];
+  projects.forEach(function (p, k) {
+    var sl = el('article', 'slide'); sl.setAttribute('aria-roledescription', 'slide'); sl.setAttribute('aria-label', (k + 1) + ' of ' + projects.length + ': ' + p.title);
+    var media = el('div', 'sl-media');
+    if (p.video) {
+      var v = el('video'); v.controls = true; v.playsInline = true; v.preload = 'metadata'; v.muted = !!p.muted; if (p.poster) v.poster = p.poster;
+      var base = p.video.replace(/\.(mp4|webm)$/i, '');
+      [['.webm', 'video/webm'], ['.mp4', 'video/mp4']].forEach(function (x) { var so = document.createElement('source'); so.src = base + x[0]; so.type = x[1]; v.appendChild(so); });
+      media.appendChild(v);
+    } else if (p.images && p.images.length) { var im = el('img'); im.src = p.images[0]; im.alt = p.title; media.appendChild(im); }
+    sl.appendChild(media);
+    var tx = el('div', 'sl-text');
+    tx.appendChild(el('ul', 'tags', (p.tags || []).map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('')));
+    tx.appendChild(el('h3', null, esc(p.title)));
+    if (p.summary) tx.appendChild(el('p', 'sl-sum', esc(p.summary)));
+    if (p.bullets && p.bullets.length) {
+      if (p.bulletsTitle) tx.appendChild(el('p', 'kicker', esc(p.bulletsTitle)));
+      tx.appendChild(el('ul', 'plain', p.bullets.map(function (b) { return '<li>' + esc(b) + '</li>'; }).join('')));
+    }
+    if (p.link) { var lp = el('p', 'cad-link'); var la = el('a', null, esc(p.linkText || 'Open link')); la.href = p.link; la.target = '_blank'; la.rel = 'noopener'; lp.appendChild(la); tx.appendChild(lp); }
+    sl.appendChild(tx); track.appendChild(sl);
+    var d = el('button'); d.type = 'button'; d.setAttribute('aria-label', 'Project ' + (k + 1) + ': ' + p.title); d.onclick = function () { go(k); }; dots.appendChild(d);
   });
-  render();
+  var cur = 0;
+  function go(k) { k = Math.max(0, Math.min(projects.length - 1, k)); track.scrollTo({ left: track.children[k].offsetLeft - track.offsetLeft, behavior: 'smooth' }); }
+  function mark() {
+    var w = track.clientWidth || 1; cur = Math.round(track.scrollLeft / w);
+    dots.querySelectorAll('button').forEach(function (b, j) { b.classList.toggle('on', j === cur); });
+    track.querySelectorAll('video').forEach(function (v, j) { if (j !== cur && !v.paused) v.pause(); });
+    var sl = document.getElementById('cad-slider');
+    sl.querySelector('.prev').disabled = cur === 0; sl.querySelector('.next').disabled = cur >= projects.length - 1;
+  }
+  document.querySelector('#cad-slider .prev').onclick = function () { go(cur - 1); };
+  document.querySelector('#cad-slider .next').onclick = function () { go(cur + 1); };
+  track.addEventListener('scroll', function () { clearTimeout(track._t); track._t = setTimeout(mark, 80); });
+  track.tabIndex = 0;
+  track.addEventListener('keydown', function (e) { if (e.key === 'ArrowRight') { e.preventDefault(); go(cur + 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1); } });
+  if (projects.length < 2) { document.getElementById('cad-slider').classList.add('single'); }
+  mark();
 })();
 
 /* ---------- lightbox ---------- */

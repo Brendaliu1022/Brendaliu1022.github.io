@@ -236,3 +236,30 @@ figcaption.quote.fade{opacity:0}
 .q-dots button{width:8px;height:8px;border-radius:50%;border:1px solid var(--brass);background:transparent;padding:0;cursor:pointer}
 .q-dots button.on{background:var(--brass)}
 .cad-link{font:500 .88rem "Archivo",sans-serif}
+
+/* ===== v4: CAD slider, PID text ===== */
+h4.kicker,p.kicker{font:600 .78rem "Archivo",sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--brass);margin:16px 0 4px}
+.btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn.primary:hover{background:var(--brass);border-color:var(--brass);color:#fff}
+.small-link{font:500 .86rem "Archivo",sans-serif;margin-left:12px;color:var(--steel)}
+.slider{position:relative}
+.sl-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;gap:0;scrollbar-width:none;outline:none}
+.sl-track::-webkit-scrollbar{display:none}
+.slide{flex:0 0 100%;scroll-snap-align:start;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:28px;align-items:start;padding:2px}
+.sl-media video,.sl-media img{width:100%;display:block;border-radius:6px;border:1px solid var(--rule);background:#000;aspect-ratio:16/10;object-fit:contain}
+.sl-text h3{font-size:1.25rem;margin:6px 0 8px}
+.sl-text .sl-sum{margin:0 0 4px}
+.sl-text ul.plain li{margin:.35em 0;font-size:.97rem;line-height:1.55}
+ul.tags{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+ul.tags li{font:600 .76rem "Archivo",sans-serif;color:#5E4313;background:var(--brass-soft);border-radius:3px;padding:3px 9px 3px 18px;position:relative}
+ul.tags li::before{content:"";position:absolute;left:8px;top:50%;width:5px;height:5px;margin-top:-2.5px;border-radius:50%;background:var(--brass)}
+.sl-btn{position:absolute;top:calc(50% - 22px);width:40px;height:40px;border-radius:50%;border:1px solid var(--rule);background:var(--panel);color:var(--ink);font-size:1.5rem;line-height:1;cursor:pointer;z-index:2;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.sl-btn.prev{left:-54px}.sl-btn.next{right:-54px}
+.sl-btn:disabled{opacity:.3;cursor:default}
+.slider.single .sl-btn{display:none}
+.sl-dots{display:flex;justify-content:center;gap:10px;margin-top:18px}
+.sl-dots button{width:9px;height:9px;border-radius:50%;border:1px solid var(--brass);background:transparent;padding:0;cursor:pointer}
+.sl-dots button.on{background:var(--brass)}
+@media (max-width:1180px){.sl-btn.prev{left:-14px}.sl-btn.next{right:-14px}.sl-btn{top:-56px}.sl-btn.prev{left:auto;right:46px}.sl-btn.next{right:0}}
+@media (max-width:820px){.slide{grid-template-columns:1fr;gap:14px}}
+@media (max-width:1180px){#cad .intro{padding-right:100px}}
