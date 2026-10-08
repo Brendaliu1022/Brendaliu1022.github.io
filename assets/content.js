@@ -79,9 +79,11 @@ window.SITE = {
       role: "Modeling and building the robot, and the Arduino automation and control code: the heading-control loop, piston timing, distance-triggered turns and stop, and the impulse-test logger whose data I fed into the course simulator.",
       images: [
         { file: "assets/cad/mae106-iso.jpg", caption: "Full assembly, isometric view" },
+        { file: "assets/cad/mae106-photo-robot.jpg", caption: "The built robot: air-tank tire with relief valve, Arduino, breadboard, MOSFET, voltage converter and battery" },
         { file: "assets/cad/mae106-side.jpg", caption: "Side view: air-tank tire, electronics deck and drive deck" },
         { file: "assets/cad/mae106-steering.jpg", caption: "Servo-driven Ackermann steering linkage" },
         { file: "assets/cad/mae106-propulsion.jpg", caption: "Propulsion: piston cylinder with rack and pinion on the rear axle" },
+        { file: "assets/cad/mae106-photo-drive.jpg", caption: "The built drive: 3D-printed rack and pinion on the rear axle" },
         { file: "assets/cad/mae106-drive-top.jpg", caption: "Drive deck from above: steering at the front, piston and rack at the rear" },
         { file: "assets/cad/mae106-wiring.jpg", caption: "Wiring: Arduino, magnetometer, MOSFET-switched solenoid, servo, reed switch, 12 V battery and 12 V to 6 V converter" },
         { file: "assets/cad/mae106-kp-sweep.jpg", caption: "Steering accuracy against proportional gain Kp (mean ± spread of 10 runs)" },
