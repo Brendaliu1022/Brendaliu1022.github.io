@@ -233,7 +233,7 @@
   <div class="head">
     <h2>CAD &amp; Design</h2>
     <div class="body wide">
-      <p class="narrow intro">SolidWorks models and mechanism designs from my courses and team projects. Use the arrows or swipe to move between projects.</p>
+      <p class="narrow intro">SolidWorks models and mechanism designs from my courses, team projects and personal work. Use the arrows or swipe to move between projects.</p>
       <div class="slider" id="cad-slider" aria-roledescription="carousel" aria-label="CAD projects">
         <button class="sl-btn prev" type="button" aria-label="Previous project">‹</button>
         <div class="sl-track" id="cad-track"></div>
@@ -345,7 +345,26 @@ function ytId(u) { var m = String(u).match(/(?:youtu\.be\/|v=|embed\/|shorts\/)(
       var base = p.video.replace(/\.(mp4|webm)$/i, '');
       [['.webm', 'video/webm'], ['.mp4', 'video/mp4']].forEach(function (x) { var so = document.createElement('source'); so.src = base + x[0]; so.type = x[1]; v.appendChild(so); });
       media.appendChild(v);
-    } else if (p.images && p.images.length) { var im = el('img'); im.src = p.images[0]; im.alt = p.title; media.appendChild(im); }
+    } else if (p.images && p.images.length) {
+      var pics = p.images.map(function (x) { return typeof x === 'string' ? { file: x, caption: '' } : x; });
+      var lbItems = pics.map(function (x) { return { type: 'img', src: x.file, cap: x.caption || p.title }; });
+      var ci = 0;
+      var main = el('button', 'sl-main'); main.type = 'button'; main.setAttribute('aria-label', 'Enlarge image');
+      var mi = el('img'); mi.src = pics[0].file; mi.alt = pics[0].caption || p.title; main.appendChild(mi); media.appendChild(main);
+      var cap = el('p', 'sl-cap', esc(pics[0].caption || '')); media.appendChild(cap);
+      main.onclick = function () { openLB(lbItems, ci); };
+      if (pics.length > 1) {
+        var th = el('div', 'sl-thumbs');
+        pics.forEach(function (x, j) {
+          var b = el('button'); b.type = 'button'; b.setAttribute('aria-label', 'Show image ' + (j + 1) + (x.caption ? ': ' + x.caption : ''));
+          var ti = el('img'); ti.src = x.file; ti.alt = ''; ti.loading = 'lazy'; b.appendChild(ti);
+          if (j === 0) b.classList.add('on');
+          b.onclick = function () { ci = j; mi.src = x.file; mi.alt = x.caption || p.title; cap.textContent = x.caption || ''; th.querySelectorAll('button').forEach(function (y, q) { y.classList.toggle('on', q === j); }); };
+          th.appendChild(b);
+        });
+        media.appendChild(th);
+      }
+    }
     sl.appendChild(media);
     var tx = el('div', 'sl-text');
     tx.appendChild(el('ul', 'tags', (p.tags || []).map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('')));
@@ -355,6 +374,7 @@ function ytId(u) { var m = String(u).match(/(?:youtu\.be\/|v=|embed\/|shorts\/)(
       if (p.bulletsTitle) tx.appendChild(el('p', 'kicker', esc(p.bulletsTitle)));
       tx.appendChild(el('ul', 'plain', p.bullets.map(function (b) { return '<li>' + esc(b) + '</li>'; }).join('')));
     }
+    if (p.role) { tx.appendChild(el('p', 'kicker', 'My role')); tx.appendChild(el('p', 'sl-role', esc(p.role))); }
     if (p.link) { var lp = el('p', 'cad-link'); var la = el('a', null, esc(p.linkText || 'Open link')); la.href = p.link; la.target = '_blank'; la.rel = 'noopener'; lp.appendChild(la); tx.appendChild(lp); }
     sl.appendChild(tx); track.appendChild(sl);
     var d = el('button'); d.type = 'button'; d.setAttribute('aria-label', 'Project ' + (k + 1) + ': ' + p.title); d.onclick = function () { go(k); }; dots.appendChild(d);

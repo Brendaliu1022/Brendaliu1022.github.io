@@ -9,7 +9,7 @@ I am a senior at the University of California, Irvine, studying mechanical and a
 - **Research** – covariance-steering guidance for safe spacecraft rendezvous (advisor: Asst. Prof. Yuri Shimane, XLC group, UC Irvine), with Monte Carlo results from my simulations.
 - **Publications and talks** – my AIAA conference talk (April 2026), the paper in preparation, and my EEIC 2025 paper.
 - **Experience** – servo-drive electronics and motor-control firmware (internship), and a PD/PID motor-angle control project with an interactive step-response demo you can try in the browser.
-- **CAD & Design** – SolidWorks models with images and video. Click a card to open the gallery.
+- **CAD & Design** – SolidWorks models from courses, team projects and personal work (a pneumatic autonomous rover for MAE 106 and a mechanical clock movement among them), with videos and image galleries.
 
 ## Tips for viewing
 
