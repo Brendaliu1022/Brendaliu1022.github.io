@@ -294,3 +294,11 @@ ul.tags li::before{content:"";position:absolute;left:8px;top:50%;width:5px;heigh
 .sky .sat-line{stroke:var(--ink);stroke-width:.8}
 .wrap{position:relative;z-index:0}
 @media (prefers-reduced-motion:reduce){.sky .tw{animation:none}}
+
+/* ---- OpenSkies design project ---- */
+.xp-logo{display:flex;align-items:center;gap:12px}
+.xp-logo img{width:44px;height:44px;flex:0 0 44px;object-fit:contain}
+.gallery.fit img{object-fit:contain;background:#fff}
+.gallery.fit figure:last-child{grid-column:auto}
+.gallery.fit figure:nth-child(n+3){grid-column:1 / -1}
+.gallery.fit figure:nth-child(n+3) img{aspect-ratio:16/9}

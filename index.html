@@ -81,26 +81,34 @@
       <h3>Covariance steering for safe spacecraft rendezvous</h3>
       <p class="meta">Advisor: <a href="https://engineering.uci.edu/node/15202">Yuri Shimane</a>, Assistant Professor of Mechanical and Aerospace Engineering, UC Irvine, eXploration Logistics and Control (XLC) group. September 2025 to present.</p>
       <p>When two spacecraft meet in orbit, navigation is imperfect and thrusters are noisy, and a small error at a few meters per second can end in a collision. We design the nominal trajectory and the spread of possible errors at the same time, so that safety constraints hold with a chosen probability rather than only in the ideal case.</p>
+      <h3 class="sub">What is established</h3>
       <ol class="pipeline" aria-label="Method pipeline">
-        <li>Relative motion in quasi-nonsingular relative orbit elements, with J₂ and differential drag in an augmented 9-state model</li>
+        <li>Relative motion in quasi-nonsingular relative orbit elements (QNS-ROE) with J₂, as a discrete-time linear model</li>
         <li>Output feedback through an offline-precomputed Kalman filter</li>
         <li>Chance constraint on control magnitude, recast as a second-order cone through a χ² quantile bound</li>
         <li>Sequential convex programming with a linearized e/i-vector passive-safety constraint</li>
-        <li>Sparse, hands-off feedback gains through iteratively reweighted ℓ<sub>1,p</sub> regularization</li>
-        <li>Closed-loop validation by nonlinear Monte Carlo simulation</li>
+        <li>Policy designed offline on the ground and exported as a file; on board, the spacecraft only filters and applies <i>u</i> = <i>v</i> + <i>K</i>(<i>x̂</i> − <i>μ</i>)</li>
+        <li>Closed-loop execution in a nonlinear high-fidelity simulation, checked with Monte Carlo runs</li>
       </ol>
+      <h3 class="sub">Current work</h3>
+      <ul class="plain">
+        <li><b>Differential drag:</b> an augmented 9-state QNS-ROE model with drag states. I am adjusting its parameters and debugging it before it goes into the closed loop.</li>
+        <li><b>Sparse feedback:</b> hands-off gains through iteratively reweighted ℓ<sub>1,p</sub> regularization (after Kumagai and Oguri). I am tuning the weights and debugging the solver behavior.</li>
+        <li><b>Process noise:</b> calibrating it from residuals between the nonlinear simulation and the linear model.</li>
+        <li><b>Next:</b> robust e/i constraints inside the nonlinear closed loop, larger Monte Carlo samples, and the conference paper.</li>
+      </ul>
       </div>
 
-      <h3 class="sub">Results from my simulations</h3>
+      <h3 class="sub">Figures from the established framework (J₂ model)</h3>
       <div class="figs two">
         <figure><button class="zoom" data-group="res"><img src="assets/research/mc-open-loop.png" alt="Open-loop Monte Carlo trajectories spreading away from the planned transfer"></button>
           <figcaption><b>Without feedback.</b> Nonlinear Monte Carlo runs (gray) drift away from the planned mean transfer (magenta).</figcaption></figure>
         <figure><button class="zoom" data-group="res"><img src="assets/research/mc-closed-loop.png" alt="Closed-loop Monte Carlo trajectories staying on the planned transfer"></button>
           <figcaption><b>With covariance-steering feedback.</b> The same runs stay on the planned transfer from the initial orbit (blue) to the final orbit (green).</figcaption></figure>
-        <figure><button class="zoom" data-group="res"><img src="assets/research/sparse-gains.png" alt="Pareto front of cost versus number of nonzero feedback gains, and feedback activity over time"></button>
-          <figcaption><b>Sparse feedback.</b> Left: cost versus number of active gains; IRL1P tracks the brute-force Pareto front. Right: feedback switched on only where it is needed.</figcaption></figure>
-        <figure><button class="zoom" data-group="res"><img src="assets/research/model-fidelity.png" alt="Relative orbit elements over 15 hours for nonlinear truth and three linear models"></button>
-          <figcaption><b>Model fidelity.</b> Linear relative-motion models (HCW alone, with J₂, with J₂ and drag) compared with nonlinear propagation over 15 hours.</figcaption></figure>
+        <figure><button class="zoom" data-group="res"><img src="assets/research/covariance-history-j2.png" alt="Covariance history of each relative orbit element over three orbits, split into estimated state and estimation error, with nonlinear Monte Carlo samples"></button>
+          <figcaption><b>Output feedback.</b> 1σ history of each relative orbit element in the nonlinear simulation, split into the estimated-state and estimation-error parts of the covariance.</figcaption></figure>
+        <figure><button class="zoom" data-group="res"><img src="assets/research/ei-passive-safety.png" alt="e/i angle and allowance over time for a nominal cone constraint and a chance-constrained cone"></button>
+          <figcaption><b>Passive safety.</b> e/i-vector angle along the transfer for a nominal cone constraint and the chance-constrained cone, against the allowed maximum (dashed).</figcaption></figure>
       </div>
 
       <div class="mine narrow">
@@ -108,8 +116,9 @@
         <p>This is a one-on-one project with Prof. Shimane, who provides guidance, research direction, problem settings and feedback; other faculty occasionally review the work. I wrote most of the code from the start, in two Julia packages: SpacecraftRendezVous.jl for dynamics and simulation, and the covariance-control solver.</p>
         <ul class="plain">
           <li>Formulated and solved the covariance-steering problem in JuMP with the Clarabel solver: Kalman-filter output feedback, second-order-cone chance constraints, and the SCP loop with passive safety.</li>
-          <li>Implemented the QNS-ROE dynamics with J₂ and differential drag, including the augmented drag model and its empirical calibration, with unit tests and continuous integration.</li>
-          <li>Implemented sparse feedback gains (IRL1P, after Kumagai and Oguri) and traced the cost–sparsity trade-off: removing about half of the active feedback steps costs less than 5% in transient covariance.</li>
+          <li>Implemented the QNS-ROE dynamics with J₂, with unit tests and continuous integration, and wrote the augmented differential-drag model that I am now calibrating and debugging.</li>
+          <li>Built the ground-design and on-board-execution split: the offline solver exports the policy, and the nonlinear simulation reads it and runs the filter and feedback loop.</li>
+          <li>Implemented sparse feedback gains (IRL1P, after Kumagai and Oguri); tuning and debugging are in progress.</li>
           <li>Built the nonlinear Monte Carlo pipeline: 200 closed-loop runs met the 1% chance constraint with no violations.</li>
           <li>Presented the work at an AIAA conference in April 2026 and am writing the paper as first author with Prof. Shimane.</li>
         </ul>
@@ -163,6 +172,34 @@
   <div class="head">
     <h2>Experience</h2>
     <div class="body wide">
+
+      <article class="xp">
+        <h3 class="xp-logo"><img src="assets/design/openskies-logo.png" alt="" width="44" height="44">OpenSkies: wheelchair docking and restraint system for aircraft cabins</h3>
+        <p class="meta">MAE 151A/B senior design project, UC Irvine · Sponsor: Prof. Natascha Buswell · Six-person team, my role: controls and electrical · Fall 2026 to present, just started</p>
+        <div class="xp-grid">
+          <div>
+            <p>Air travel forces wheelchair users to transfer between chairs several times per trip, often being lifted over armrests, boarding first and leaving last. Their own wheelchair must also be securely restrained if it stays in the cabin, in a space that is already tight. Our project, “Air Travel for All,” asks: <i>how can we develop a secure, space-efficient and user-accessible docking and locking system that keeps a wheelchair in place in a commercial aircraft cabin?</i></p>
+            <h4 class="kicker">Where we are</h4>
+            <ul class="plain">
+              <li>Problem defined and a concept selected: floor indents that the wheels seat into, plus a locking mechanism between the wheelchair, the floor and the seat structure. A rough draft CAD model is done.</li>
+              <li>Draft requirements: the lock shall stop horizontal and vertical displacement under static and operational loads; complete a full lock or unlock cycle from a single button press; clamp round, oval or square frame tubing; and let a seated user attach it independently, without tools.</li>
+              <li>Main risks we are tracking: structural integrity, reliable locking and unlocking, and quick release for emergency evacuation.</li>
+              <li>Next: confirm the scope with our sponsor, run a field survey, set the budget and bill of materials, and order parts. The goal is a working locking mechanism (RevA) by the end of 151A and an improved RevB with user testing in 151B.</li>
+            </ul>
+            <div class="mine">
+              <h3>My part so far</h3>
+              <p>I built the system models for our problem definition: the grey-box model of inputs, outputs and internal functions, and the structural hierarchy that breaks the assembly into subsystems and components. As the controls and electrical lead, I will design the lock actuation, the lock-status feedback and the safety interlock that permits release.</p>
+            </div>
+            <p class="chips"><span>Senior design</span><span>Accessibility</span><span>FAA cabin requirements</span><span>Mechanism design</span><span>Systems modeling</span></p>
+          </div>
+          <div class="gallery fit">
+            <figure><button class="zoom" data-group="openskies"><img src="assets/design/openskies-concept-1.jpg" alt="Draft CAD of a wheelchair docked in floor indents beside a cabin wall"></button><figcaption>Draft concept (team CAD): wheels seated in floor indents</figcaption></figure>
+            <figure><button class="zoom" data-group="openskies"><img src="assets/design/openskies-concept-2.jpg" alt="Close-up of the draft wheel docking blocks"></button><figcaption>Draft concept: wheel docking blocks</figcaption></figure>
+            <figure><button class="zoom" data-group="openskies"><img src="assets/design/openskies-grey-box.png" alt="Grey-box model of the wheelchair docking and restraint system"></button><figcaption>Grey-box model of the docking and restraint system (my work)</figcaption></figure>
+            <figure><button class="zoom" data-group="openskies"><img src="assets/design/openskies-structure.png" alt="Structural hierarchy of the wheelchair docking and restraint assembly"></button><figcaption>Structural hierarchy: system, subsystems and components (my work)</figcaption></figure>
+          </div>
+        </div>
+      </article>
 
       <article class="xp">
         <h3>Servo drive electronics and motor-control firmware</h3>
