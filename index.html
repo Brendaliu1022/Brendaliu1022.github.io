@@ -93,7 +93,7 @@
       <h3 class="sub">Current work</h3>
       <ul class="plain">
         <li><b>Differential drag:</b> an augmented 9-state QNS-ROE model with drag states. I am adjusting its parameters and debugging it before it goes into the closed loop.</li>
-        <li><b>Sparse feedback:</b> hands-off gains through iteratively reweighted ℓ<sub>1,p</sub> regularization (after Kumagai and Oguri). I am tuning the weights and debugging the solver behavior.</li>
+        <li><b>Sparse feedback:</b> hands-off gains through iteratively reweighted ℓ<sub>1,p</sub> regularization (after Kumagai and Oguri). I have run a first sweep of the sparsity weight (below) and am debugging why the result is not yet monotone in that weight.</li>
         <li><b>Process noise:</b> calibrating it from residuals between the nonlinear simulation and the linear model.</li>
         <li><b>Next:</b> robust e/i constraints inside the nonlinear closed loop, larger Monte Carlo samples, and the conference paper.</li>
       </ul>
@@ -111,6 +111,15 @@
           <figcaption><b>Passive safety.</b> e/i-vector angle along the transfer for a nominal cone constraint and the chance-constrained cone, against the allowed maximum (dashed).</figcaption></figure>
       </div>
 
+      <h3 class="sub">Work in progress: sparse feedback sweep</h3>
+      <p class="narrow">I swept the sparsity weight λ from 0.01 to 100 at two design process-noise levels, σ<sub>w</sub> = 0.1 m and 1 m. Each policy was checked against the terminal-covariance requirement, the control chance constraint and 20 closed-loop runs in the nonlinear simulation. At σ<sub>w</sub> = 0.1 m, λ = 20 switched feedback off on 45 of 107 steps, mostly late in the transfer, with every check still met. At σ<sub>w</sub> = 1 m the terminal covariance has almost no margin, so little feedback can be removed. The response is not yet monotone in λ (λ = 100 removes fewer steps than λ = 20), which is what I am debugging now.</p>
+      <div class="figs two">
+        <figure><button class="zoom" data-group="res"><img src="assets/research/sparse-sweep-steps.png" alt="Steps with feedback switched on over three orbits for each sparsity weight lambda"></button>
+          <figcaption><b>Where feedback stays on.</b> Each row is one sparsity weight λ; large dots are steps with feedback, small gray dots are steps where the gain is zero (σ<sub>w</sub> = 0.1 m).</figcaption></figure>
+        <figure><button class="zoom" data-group="res"><img src="assets/research/sparse-sweep-sigma.png" alt="Planned 1-sigma of each relative orbit element over three orbits for each sparsity weight, with the required terminal values"></button>
+          <figcaption><b>What it costs.</b> Planned 1σ of each relative orbit element with the flown gains, for every λ, against the required terminal 1σ (diamonds).</figcaption></figure>
+      </div>
+
       <div class="mine narrow">
         <h3>What I did</h3>
         <p>This is a one-on-one project with Prof. Shimane, who provides guidance, research direction, problem settings and feedback; other faculty occasionally review the work. I wrote most of the code from the start, in two Julia packages: SpacecraftRendezVous.jl for dynamics and simulation, and the covariance-control solver.</p>
@@ -118,7 +127,7 @@
           <li>Formulated and solved the covariance-steering problem in JuMP with the Clarabel solver: Kalman-filter output feedback, second-order-cone chance constraints, and the SCP loop with passive safety.</li>
           <li>Implemented the QNS-ROE dynamics with J₂, with unit tests and continuous integration, and wrote the augmented differential-drag model that I am now calibrating and debugging.</li>
           <li>Built the ground-design and on-board-execution split: the offline solver exports the policy, and the nonlinear simulation reads it and runs the filter and feedback loop.</li>
-          <li>Implemented sparse feedback gains (IRL1P, after Kumagai and Oguri); tuning and debugging are in progress.</li>
+          <li>Implemented sparse feedback gains (IRL1P, after Kumagai and Oguri) and ran a sweep of the sparsity weight at two process-noise levels; tuning and debugging are in progress.</li>
           <li>Built the nonlinear Monte Carlo pipeline: 200 closed-loop runs met the 1% chance constraint with no violations.</li>
           <li>Presented the work at an AIAA conference in April 2026 and am writing the paper as first author with Prof. Shimane.</li>
         </ul>
