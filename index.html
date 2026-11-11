@@ -83,19 +83,19 @@
       <p>When two spacecraft meet in orbit, navigation is imperfect and thrusters are noisy, and a small error at a few meters per second can end in a collision. We design the nominal trajectory and the spread of possible errors at the same time, so that safety constraints hold with a chosen probability rather than only in the ideal case.</p>
       <h3 class="sub">What is established</h3>
       <ol class="pipeline" aria-label="Method pipeline">
-        <li>Relative motion in quasi-nonsingular relative orbit elements (QNS-ROE) with J₂, as a discrete-time linear model</li>
+        <li>Relative motion in quasi-nonsingular relative orbit elements (QNS-ROE) with J₂, as a discrete-time linear model; for low orbits, a 9-state model adds differential-drag drift rates fitted to the high-fidelity simulation</li>
         <li>Output feedback through an offline-precomputed Kalman filter</li>
         <li>Chance constraint on control magnitude, recast as a second-order cone through a χ² quantile bound</li>
-        <li>Sequential convex programming with a linearized e/i-vector passive-safety constraint</li>
+        <li>Sequential convex programming with a linearized e/i-vector passive-safety constraint, plus a path bound on the total covariance written as a convex LMI</li>
+        <li>Hands-off (sparse) feedback: IRL1P ranks the steps, then a polish step switches feedback off on the largest set that still passes every check with the gains actually flown</li>
         <li>Policy designed offline on the ground and exported as a file; on board, the spacecraft only filters and applies <i>u</i> = <i>v</i> + <i>K</i>(<i>x̂</i> − <i>μ</i>)</li>
         <li>Closed-loop execution in a nonlinear high-fidelity simulation, checked with Monte Carlo runs</li>
       </ol>
       <h3 class="sub">Current work</h3>
       <ul class="plain">
-        <li><b>Differential drag:</b> an augmented 9-state QNS-ROE model with drag states. I am adjusting its parameters and debugging it before it goes into the closed loop.</li>
-        <li><b>Sparse feedback:</b> hands-off gains through iteratively reweighted ℓ<sub>1,p</sub> regularization (after Kumagai and Oguri). I have run a first sweep of the sparsity weight (below) and am debugging why the result is not yet monotone in that weight.</li>
-        <li><b>Process noise:</b> calibrating it from residuals between the nonlinear simulation and the linear model.</li>
-        <li><b>Next:</b> robust e/i constraints inside the nonlinear closed loop, larger Monte Carlo samples, and the conference paper.</li>
+        <li><b>Sparse feedback with drag:</b> combining the two in the 350 km low-orbit case.</li>
+        <li><b>Consistent process noise:</b> the same design noise per step is not the same noise per orbit when the step size changes, so I am making it consistent across the two settings, calibrated from residuals between the nonlinear simulation and the linear model.</li>
+        <li><b>Next:</b> solar radiation pressure and other perturbations, robust e/i constraints inside the nonlinear closed loop, larger Monte Carlo samples, and the conference paper.</li>
       </ul>
       </div>
 
@@ -111,13 +111,31 @@
           <figcaption><b>Passive safety.</b> e/i-vector angle along the transfer for a nominal cone constraint and the chance-constrained cone, against the allowed maximum (dashed).</figcaption></figure>
       </div>
 
-      <h3 class="sub">Work in progress: sparse feedback sweep</h3>
-      <p class="narrow">I swept the sparsity weight λ from 0.01 to 100 at two design process-noise levels, σ<sub>w</sub> = 0.1 m and 1 m. Each policy was checked against the terminal-covariance requirement, the control chance constraint and 20 closed-loop runs in the nonlinear simulation. At σ<sub>w</sub> = 0.1 m, λ = 20 switched feedback off on 45 of 107 steps, mostly late in the transfer, with every check still met. At σ<sub>w</sub> = 1 m the terminal covariance has almost no margin, so little feedback can be removed. The response is not yet monotone in λ (λ = 100 removes fewer steps than λ = 20), which is what I am debugging now.</p>
+      <h3 class="sub">Two settings, one transfer</h3>
+      <p class="narrow">The same rendezvous is flown in two settings: a baseline at a = 7000 km (3 orbits, 107 steps) with J₂, Moon and Sun, and a low orbit at 350 km (6 orbits, 71 steps) where differential drag also matters. The chaser closes from 1000 m to 100 m along track and from 400 m to 100 m in the e/i vectors, under a 100 mm/s per-step thrust limit, a 1% chance constraint, a 30° e/i cone and noisy relative-orbit measurements.</p>
+      <div class="figs one">
+        <figure><button class="zoom" data-group="res"><img src="assets/research/two-settings.png" alt="Comparison of the baseline and 350 km settings: time grids, perturbation magnitudes, the transfer in the R-N plane, and process noise per orbit"></button>
+          <figcaption><b>The two settings.</b> Time grids, the size of each perturbation, the transfer in the radial–normal plane, and why the same noise per step is not the same noise per orbit.</figcaption></figure>
+      </div>
+
+      <h3 class="sub">Sparse (hands-off) feedback</h3>
+      <p class="narrow">Feedback on every step means many small impulses. I swept the sparsity weight λ from 0.01 to 100 at two design noise levels and checked every policy with the gains actually flown: terminal covariance, the control chance constraint and 20 nonlinear Monte Carlo runs. All patterns passed, with 0 of 2140 sampled controls above the thrust limit. At σ<sub>w</sub> = 0.1 m, λ = 20 switches feedback off after about 1.7 orbits (44 of 107 steps) and λ = 100 switches off 31 steps in four blocks. At σ<sub>w</sub> = 1 m, small λ removes only a few steps at the end, but λ = 100 removes 72 of 107 and lowers the mean Δv from 530 to 457 mm/s.</p>
       <div class="figs two">
-        <figure><button class="zoom" data-group="res"><img src="assets/research/sparse-sweep-steps.png" alt="Steps with feedback switched on over three orbits for each sparsity weight lambda"></button>
-          <figcaption><b>Where feedback stays on.</b> Each row is one sparsity weight λ; large dots are steps with feedback, small gray dots are steps where the gain is zero (σ<sub>w</sub> = 0.1 m).</figcaption></figure>
+        <figure><button class="zoom" data-group="res"><img src="assets/research/sparse-gain-sw01.png" alt="Feedback gain norm per step over three orbits for lambda 0, 5, 20 and 100 at design noise 0.1 m"></button>
+          <figcaption><b>Feedback gain per step, σ<sub>w</sub> = 0.1 m.</b> λ = 5 drops the last steps, λ = 20 stops feedback after about 1.7 orbits, λ = 100 in four blocks.</figcaption></figure>
+        <figure><button class="zoom" data-group="res"><img src="assets/research/sparse-gain-sw1.png" alt="Feedback gain norm per step over three orbits for lambda 0, 5, 20 and 100 at design noise 1 m"></button>
+          <figcaption><b>Feedback gain per step, σ<sub>w</sub> = 1 m.</b> λ = 100 keeps feedback on only 35 of 107 steps, all of them suggested by IRL1P.</figcaption></figure>
+        <figure><button class="zoom" data-group="res"><img src="assets/research/sparse-irl1p-polish.png" alt="Steps IRL1P suggests switching off, shaded, with the flown gain after polish for lambda 20"></button>
+          <figcaption><b>IRL1P suggestion vs polish (λ = 20).</b> Shaded: the 46 steps IRL1P suggests switching off. Line: the flown gain after polish, which keeps 44 of them off.</figcaption></figure>
         <figure><button class="zoom" data-group="res"><img src="assets/research/sparse-sweep-sigma.png" alt="Planned 1-sigma of each relative orbit element over three orbits for each sparsity weight, with the required terminal values"></button>
-          <figcaption><b>What it costs.</b> Planned 1σ of each relative orbit element with the flown gains, for every λ, against the required terminal 1σ (diamonds).</figcaption></figure>
+          <figcaption><b>What it costs.</b> Planned 1σ with the flown gains for every λ (σ<sub>w</sub> = 0.1 m). It grows once feedback stops but ends inside the requirement (diamonds).</figcaption></figure>
+      </div>
+
+      <h3 class="sub">Differential drag at 350 km: first closed-loop results</h3>
+      <p class="narrow">At 350 km the fitted drift is about −3.5 mm/s in aδa, roughly 19 m of decay per orbit. The 9-state model plans around that drift over 6 orbits. In 20 nonlinear Monte Carlo runs the spread stays within the planned ±3σ band (0.07% of points outside, below the 0.27% of a Gaussian), with terminal 1σ under 2.5 m.</p>
+      <div class="figs one">
+        <figure><button class="zoom" data-group="res"><img src="assets/research/drag-leo350-closed-loop.png" alt="Closed-loop relative orbit elements and control over six orbits at 350 km with differential drag, with Monte Carlo runs inside the planned three-sigma band"></button>
+          <figcaption><b>Closed loop with J₂ and differential drag (350 km).</b> Planned mean (magenta), 20 nonlinear Monte Carlo runs (gray) and the planned ±3σ band; the sloped δa segments are the drag drift.</figcaption></figure>
       </div>
 
       <div class="mine narrow">
@@ -125,9 +143,10 @@
         <p>This is a one-on-one project with Prof. Shimane, who provides guidance, research direction, problem settings and feedback; other faculty occasionally review the work. I wrote most of the code from the start, in two Julia packages: SpacecraftRendezVous.jl for dynamics and simulation, and the covariance-control solver.</p>
         <ul class="plain">
           <li>Formulated and solved the covariance-steering problem in JuMP with the Clarabel solver: Kalman-filter output feedback, second-order-cone chance constraints, and the SCP loop with passive safety.</li>
-          <li>Implemented the QNS-ROE dynamics with J₂, with unit tests and continuous integration, and wrote the augmented differential-drag model that I am now calibrating and debugging.</li>
+          <li>Implemented the QNS-ROE dynamics with J₂, with unit tests and continuous integration, and the 9-state differential-drag model with drift rates fitted to the high-fidelity simulation, now flown in the nonlinear closed loop at 350 km.</li>
           <li>Built the ground-design and on-board-execution split: the offline solver exports the policy, and the nonlinear simulation reads it and runs the filter and feedback loop.</li>
-          <li>Implemented sparse feedback gains (IRL1P, after Kumagai and Oguri) and ran a sweep of the sparsity weight at two process-noise levels; tuning and debugging are in progress.</li>
+          <li>Implemented hands-off feedback (IRL1P ranking after Kumagai and Oguri, plus a polish step), checked every pattern with the flown gains, and swept the sparsity weight at two noise levels.</li>
+          <li>Added the path bound on the total covariance as a convex LMI and built the comparison and diagnostic plots for the sweep.</li>
           <li>Built the nonlinear Monte Carlo pipeline: 200 closed-loop runs met the 1% chance constraint with no violations.</li>
           <li>Presented the work at an AIAA conference in April 2026 and am writing the paper as first author with Prof. Shimane.</li>
         </ul>
