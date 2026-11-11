@@ -113,10 +113,6 @@
 
       <h3 class="sub">Two settings, one transfer</h3>
       <p class="narrow">The same rendezvous is flown in two settings: a baseline at a = 7000 km (3 orbits, 107 steps) with J₂, Moon and Sun, and a low orbit at 350 km (6 orbits, 71 steps) where differential drag also matters. The chaser closes from 1000 m to 100 m along track and from 400 m to 100 m in the e/i vectors, under a 100 mm/s per-step thrust limit, a 1% chance constraint, a 30° e/i cone and noisy relative-orbit measurements.</p>
-      <div class="figs one">
-        <figure><button class="zoom" data-group="res"><img src="assets/research/two-settings.png" alt="Comparison of the baseline and 350 km settings: time grids, perturbation magnitudes, the transfer in the R-N plane, and process noise per orbit"></button>
-          <figcaption><b>The two settings.</b> Time grids, the size of each perturbation, the transfer in the radial–normal plane, and why the same noise per step is not the same noise per orbit.</figcaption></figure>
-      </div>
 
       <h3 class="sub">Sparse (hands-off) feedback</h3>
       <p class="narrow">Feedback on every step means many small impulses. I swept the sparsity weight λ from 0.01 to 100 at two design noise levels and checked every policy with the gains actually flown: terminal covariance, the control chance constraint and 20 nonlinear Monte Carlo runs. All patterns passed, with 0 of 2140 sampled controls above the thrust limit. At σ<sub>w</sub> = 0.1 m, λ = 20 switches feedback off after about 1.7 orbits (44 of 107 steps) and λ = 100 switches off 31 steps in four blocks. At σ<sub>w</sub> = 1 m, small λ removes only a few steps at the end, but λ = 100 removes 72 of 107 and lowers the mean Δv from 530 to 457 mm/s.</p>
