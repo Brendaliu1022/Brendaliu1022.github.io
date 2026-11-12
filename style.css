@@ -302,3 +302,6 @@ ul.tags li::before{content:"";position:absolute;left:8px;top:50%;width:5px;heigh
 .gallery.fit figure:last-child{grid-column:auto}
 .gallery.fit figure:nth-child(n+3){grid-column:1 / -1}
 .gallery.fit figure:nth-child(n+3) img{aspect-ratio:16/9}
+
+/* hero title sub-line */
+.hero h1 .h1-sub{display:block;margin-top:10px;font-size:.42em;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--brass)}
